@@ -10,19 +10,19 @@ import datetime
 sensors = []
 db = db.dbmongo()
 
-collection = "user"
+collection = "device"
 
 def add(fillData):  
     insertQuery = {
-        'username':fillData.get('username', None),
-        'password':fillData.get('password', None),
-        'email':fillData.get('email', None), 
+        'group_code_name':fillData.get('group_code_name', None),
+        'key_access':fillData.get('key_access', None),
+        'device_code':fillData.get('device_code', None),
         'name':fillData.get('name', None),
-        'otp':fillData.get('otp', None), 
-        'expired_otp':fillData.get('expired_otp', None),
-        'add_by':fillData.get('add_by', None),
+        'field':fillData.get('field', None), #arraylist [field on sensor]
         'date_add': datetime.datetime.utcnow(),
-        'active':fillData.get('active', False) 
+        'add_by':fillData.get('add_by', None),
+        'active':fillData.get('active', False),
+        'information':fillData.get('information', None), #array[location, detail, purpose]        
     }
     result = db.insertData(collection,insertQuery)
     if result == []:
@@ -32,10 +32,6 @@ def add(fillData):
     return cloud9Lib.jsonObject(response)
 
 def find(query):  
-    print(query)
-    sys.stdout.flush()
-    if 'expired_otp' in query:
-        query['expired_otp'] ={"$gt": query['expired_otp']}
     result = db.find(collection,query)
     if result == []:
         response = {"status":False, "data":query}               
@@ -44,11 +40,8 @@ def find(query):
     return cloud9Lib.jsonObject(response)
 
 def findOne(query):  
-    if 'expired_otp' in query:
-        query['expired_otp'] ={"$gt": query['expired_otp']}
     result = db.findOne(collection,query, None)
-    
-    if (result is None) or (result is False):
+    if result is None or result is False:
         response = {"status":False, "data":query}               
     else:
         response = {'status':True,'message':'Success','data':result}    
@@ -56,16 +49,21 @@ def findOne(query):
 
 def update(query,data):            
     updateData = {}
-    if 'username' in data: updateData['username'] = data['username']
-    if 'password' in data: updateData['password'] = data['password']
-    if 'email' in data: updateData['email'] = data['email']
+    queryUpdate = {}
+    if 'code_name' in query: queryUpdate['code_name'] = query['code_name']
+    if '_id' in query: queryUpdate['_id'] = query['_id']
+    
     if 'name' in data: updateData['name'] = data['name']
-    if 'otp' in data: updateData['otp'] = data['otp']
-    if 'expired_otp' in data: updateData['expired_otp'] = data['expired_otp']
     if 'active' in data: updateData['active'] = data['active']
+    if 'key_access' in data: updateData['key_access'] = data['key_access']
+    if 'device_code' in data: updateData['device_code'] = data['device_code']
+    if 'field' in data: updateData['field'] = data['field']
+    if 'information' in data: updateData['information'] = data['information']
+    if 'token_access' in data: updateData['token_access'] = data['token_access']
+
     if updateData == []:
         return {"status":False, "message":"UPDATE NONE"}        
-    result = db.updateData(collection,query,updateData)
+    result = db.updateData(collection,queryUpdate,updateData)
     if not result :
         response = {"status":False, "message":"UPDATE FAILED"}               
     else:
@@ -78,7 +76,5 @@ def delete(query):
         response = {"status":False, "message":"DELETE FAILED"}               
     else:
         response = {'status':True,'message':'Success','data':result}
-    sys.stdout.flush()
     return cloud9Lib.jsonObject(response)
 
-    

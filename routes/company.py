@@ -43,7 +43,7 @@ class add(RequestHandler):
 class list(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
+    query = data
     result = companyController.find(query)
     sys.stdout.flush()
     if not result['status']:
@@ -55,7 +55,7 @@ class list(RequestHandler):
 class detail(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
+    query = data
     result = companyController.findOne(query)
     # print(result)
     # print("------------------")

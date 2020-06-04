@@ -4,38 +4,41 @@ from tornado.web import RequestHandler
 from bson import ObjectId
 import json 
 from function import *
-from controller import sensorController
+from controller import groupSensorController
 
-sensors = []
+groups = []
 db = db.dbmongo()
 
 #PRIMARY VARIABLE - DONT DELETE
-# print(result)
-# print("------------------")
-# sys.stdout.flush()
 define_url = [
     ['add/','add'],
     ['','list'],
     ['detail','detail'],
     ['edit/','update'],
-    ['delete/([^/]+)','delete']
+    ['delete/','delete']
 ]
 
 class add(RequestHandler):
   def post(self):    
-    data = json.loads(self.request.body)    
-    insert = sensorController.add(data)    
+    data = json.loads(self.request.body)
+    if 'code_name' not in data:
+        data['code_name'] = generateCode()
+
+    if 'token_access' not in data:
+        data['token_access'] = generateToken(data['code_name'])
+
+    insert = groupSensorController.add(data)    
     if not insert['status']:
         response = {"status":False, "message":"Failed to add", 'data':json.loads(self.request.body)}               
     else:
-        response = {'message':'Success','status':True}    
+        response = {'message':'Success','status':True,'data':insert['data']}    
     self.write(response)
 
 class list(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
-    result = sensorController.find(query)    
+    query = data
+    result = groupSensorController.find(query)
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
     else:
@@ -46,10 +49,10 @@ class detail(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
     query = {}
-    result = sensorController.findOne(query)
-    print(result)
-    print("------------------")
-    sys.stdout.flush()
+    result = groupSensorController.findOne(query)
+    # print(result)
+    # print("------------------")
+    # sys.stdout.flush()
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
     else:
@@ -58,26 +61,6 @@ class detail(RequestHandler):
 
 class update(RequestHandler):
   def post(self):        
-    data = json.loads(self.request.body)
-    try:
-        query = {"_id":ObjectId(data["id"])}
-    except:
-        response = {"status":False, "message":"Wrong id",'data':json.loads(self.request.body)}               
-        self.write(response) 
-        return
-    result = sensorController.findOne(query)
-    if not result['status']:
-        response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
-    else:
-        update = sensorController.update(query,data['value'])
-        if not update.status:
-            response = {"status":False, "message":"Failed to update","data":json.loads(self.request.body)}
-        else:
-            response = {"status":True, 'message':'Update Success'}
-    self.write(response)
-
-class delete(RequestHandler):
-  def post(self,id):        
     data = json.loads(self.request.body)
     if 'id' not in data:
         response = {"status":False, "message":"Id Not Found",'data':json.loads(self.request.body)}               
@@ -90,14 +73,63 @@ class delete(RequestHandler):
         response = {"status":False, "message":"Wrong id",'data':json.loads(self.request.body)}               
         self.write(response) 
         return
-        
-    result = sensorController.findOne(query)
+
+    result = groupSensorController.findOne(query)
+    if not result['status']:
+        response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
+    else:
+        update = groupSensorController.update(query,data)
+        if not update['status']:
+            response = {"status":False, "message":"Failed to update","data":json.loads(self.request.body)}
+        else:
+            response = {"status":True, 'message':'Update Success'}
+    self.write(response)
+
+class delete(RequestHandler):
+  def post(self):        
+    data = json.loads(self.request.body)
+    if 'id' not in data:
+        response = {"status":False, "message":"Id Not Found",'data':json.loads(self.request.body)}               
+        self.write(response)
+        return
+
+    try:
+        query = {"_id":ObjectId(data["id"])}
+    except:
+        response = {"status":False, "message":"Wrong id",'data':json.loads(self.request.body)}               
+        self.write(response) 
+        return
+
+    result = groupSensorController.findOne(query)
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}            
     else:
-        delete = sensorController.delete("sensor",query)
-        if not delete.status:
+        delete = groupSensorController.delete(query)
+        if not delete['status']:
             response = {"status":False, "message":"Failed to delete","data":json.loads(self.request.body)}
         else:
             response = {"status":True, 'message':'Delete Success'}
     self.write(response)
+
+
+def generateCode():
+    code = cloud9Lib.randomStringLower(6)
+
+    #check if exist
+    query = {"code_name":code}
+    result = groupSensorController.findOne(query)
+    if result['status']:
+        return generateCode()
+    else:
+        return code
+
+def generateToken(codename):
+    code = cloud9Lib.randomStringLower(5)
+    code = code+codename+cloud9Lib.randomStringLower(6)
+    #check if exist
+    query = {"token_access":code}
+    result = groupSensorController.findOne(query)
+    if result['status']:
+        return generateToken(codename)
+    else:
+        return code

@@ -4,19 +4,28 @@ import sys
 from bson import ObjectId
 import json 
 from function import *
-
+import datetime
 
 
 sensors = []
 db = db.dbmongo()
-
-collection = "company"
+prefix = "sensor_col_"
+collection = "communication_log"
 
 def add(fillData):  
+    if 'channel_code' not in fillData:
+        fillData['channel_code'] = fillData['channel_code']+'_'+fillData['token_access']
+
+    if 'collection_name' not in fillData:
+        fillData['collection_name'] = prefix+'_'+fillData['group_id']
+
     insertQuery = {
-        'name':fillData.get('name', None),
-        'address':fillData.get('address', None),
-        'email':fillData.get('email', None)
+        'token_access':fillData.get('token_access', None),
+        'ip_sender':fillData.get('ip_sender', None), 
+        'topic':fillData.get('topic', None), 
+        'channel_type':fillData.get('channel_type', None),
+        'raw_message':fillData.get('raw_message', None)
+        'date_server': datetime.datetime.utcnow()        
     }
     result = db.insertData(collection,insertQuery)
     if result == []:
@@ -28,7 +37,7 @@ def add(fillData):
 def find(query):  
     result = db.find(collection,query)
     if result == []:
-        response = {"status":False, "data":data}               
+        response = {"status":False, "data":query}               
     else:
         response = {'status':True, 'data':result}    
     return cloud9Lib.jsonObject(response)
@@ -41,21 +50,6 @@ def findOne(query):
         response = {'status':True,'message':'Success','data':result}    
     return cloud9Lib.jsonObject(response)
 
-def update(query,data):            
-    updateData = {}
-    if 'name' in data: updateData['name'] = data['name']
-    if 'address' in data: updateData['address'] = data['address']
-    if 'email' in data: updateData['email'] = data['email']
-
-    if updateData == []:
-        return {"status":False, "message":"UPDATE NONE"}        
-    result = db.updateData(collection,query,updateData)
-    if not result :
-        response = {"status":False, "message":"UPDATE FAILED"}               
-    else:
-        response = {'status':True,'message':'Success','data':result}
-    return cloud9Lib.jsonObject(response)
-
 def delete(query):            
     result = db.deleteData(collection,query)
     if not result:
@@ -63,3 +57,4 @@ def delete(query):
     else:
         response = {'status':True,'message':'Success','data':result}
     return cloud9Lib.jsonObject(response)
+

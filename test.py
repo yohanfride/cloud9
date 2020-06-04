@@ -1,8 +1,11 @@
-fillData = {"name":"test"}
-insertQuery = {
-        'company_id':fillData.get('company_id', None),
-        'name':fillData.get('name', None),
-        'add_by':fillData.get('add_by', None),
-        'active':True 
-    }
-print(insertQuery)
+import sys
+from cryptography.fernet import Fernet
+key = b'LqvmTKu5zu_6okVmAa1e2GKOIEoHHuLzaNib9ID6dxs='
+print(key)
+f = Fernet(key)
+plain_text = 'test'
+token = f.encrypt(plain_text.encode('utf-8')).decode('utf-8')
+print(token)
+token = f.decrypt(token.encode('utf-8')).decode('utf-8')
+print(token)
+sys.stdout.flush()

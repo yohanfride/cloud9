@@ -34,7 +34,7 @@ class add(RequestHandler):
 class list(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
+    query = data
     result = sensorController.find(query)    
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
@@ -45,7 +45,7 @@ class list(RequestHandler):
 class detail(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
+    query = data
     result = sensorController.findOne(query)
     print(result)
     print("------------------")

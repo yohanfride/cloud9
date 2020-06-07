@@ -31,7 +31,7 @@ class add(RequestHandler):
 class list(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
+    query = data
     result = groupController.find(query)
     print(result)
     print("------------------")
@@ -45,7 +45,7 @@ class list(RequestHandler):
 class detail(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
+    query = data
     result = groupController.findOne(query)
     print(result)
     print("------------------")

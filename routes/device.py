@@ -70,11 +70,11 @@ class list(RequestHandler):
 class detail(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
-    result = deviceController.findOne(query)
-    print(result)
-    print("------------------")
-    sys.stdout.flush()
+    query = data
+    result = deviceController.findOne(query)    
+    # print(remote_ip)
+    # print("------------------")
+    # sys.stdout.flush()
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
     else:

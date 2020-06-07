@@ -48,7 +48,7 @@ class list(RequestHandler):
 class detail(RequestHandler):
   def post(self):    
     data = json.loads(self.request.body)
-    query = {}
+    query = data
     result = groupSensorController.findOne(query)
     # print(result)
     # print("------------------")

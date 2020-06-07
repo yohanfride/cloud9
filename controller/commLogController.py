@@ -13,18 +13,12 @@ prefix = "sensor_col_"
 collection = "communication_log"
 
 def add(fillData):  
-    if 'channel_code' not in fillData:
-        fillData['channel_code'] = fillData['channel_code']+'_'+fillData['token_access']
-
-    if 'collection_name' not in fillData:
-        fillData['collection_name'] = prefix+'_'+fillData['group_id']
-
     insertQuery = {
         'token_access':fillData.get('token_access', None),
         'ip_sender':fillData.get('ip_sender', None), 
         'topic':fillData.get('topic', None), 
         'channel_type':fillData.get('channel_type', None),
-        'raw_message':fillData.get('raw_message', None)
+        'raw_message':fillData.get('raw_message', None),
         'date_server': datetime.datetime.utcnow()        
     }
     result = db.insertData(collection,insertQuery)

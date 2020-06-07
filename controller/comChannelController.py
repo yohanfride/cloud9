@@ -91,6 +91,8 @@ def delete(query):
     return cloud9Lib.jsonObject(response)
 
 def trigger(channel_type,topic,channel_code,status):
+    print(channel_type)
+    print(topic)
     sys.stdout.flush()
     if channel_type == 'mqtt':        
         send = {
@@ -102,5 +104,17 @@ def trigger(channel_type,topic,channel_code,status):
             return
         else:
             mqttcom.publish("mqtt/service/unsubscribe",send)
+            return
+
+    if channel_type == 'nats':        
+        send = {
+            'topic':topic,
+            'channel_code':channel_code
+        }
+        if status == 'active':
+            natscom.publish("nats/service/subscribe",send)
+            return
+        else:
+            natscom.publish("nats/service/unsubscribe",send)
             return
 

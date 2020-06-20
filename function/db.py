@@ -85,6 +85,23 @@ class dbmongo:
             return True
         return False
 
+    def updatePush(self,col,filter,values):
+        if not self.checkCollections(col):
+            return False
+        self.col = self.db[col]
+        x = self.col.update(filter,{ "$push": values })        
+        if(x['nModified'] > 0):
+            return True
+        return False
+
+    def updatePull(self,col,filter,values):
+        if not self.checkCollections(col):
+            return False
+        self.col = self.db[col]
+        x = self.col.update(filter,{ "$pull": values })        
+        if(x['nModified'] > 0):
+            return True
+        return False
 #        sys.stdout.flush()
 
 if __name__ == "__main__":

@@ -150,10 +150,20 @@ class list(RequestHandler):
             query["_id"] = ObjectId(query["id"])
             del query["id"]
         except:
-            del query["id"]
-
+            del query["in"]
+    if "list" in query :
+        list_id = []
+        for i in query["list"]:
+            try:
+                list_id.append(ObjectId(i))
+            except Exception as e:
+                print("failed")
+        del query['list']
+        query["_id"] = {
+            "$in":list_id
+        }
+    sys.stdout.flush()
     result = userController.find(query)
-    #sys.stdout.flush()
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
     else:

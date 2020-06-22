@@ -26,7 +26,7 @@ def add(fillData):
         'token_access':fillData.get('token_access', None),
         'communication':fillData.get('communication', None), #array[topic, mqtt-active, http-post-active, nats-activ/e]
         'group_type':fillData.get('group_type', None),
-        'group_id':fillData.get('group_id', None)
+        'group_code':fillData.get('group_code', None)
     }
     result = db.insertData(collection,insertQuery)
     if result == []:

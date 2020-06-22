@@ -14,7 +14,7 @@ db = db.dbmongo()
 define_url = [
     ['add/','add'],
     ['','list'],
-    ['count','count'],
+    ['count/','count'],
     ['detail/','detail'],
     ['edit/','update'],
     ['delete/','delete'],

@@ -8,8 +8,12 @@ port = 1883
 client = mqttClient.Client("Python")  
 
 def publish(topic,message):
-    client.connect(broker_address, port=port)
-    time.sleep(0.5)
-    client.publish(topic,json.dumps(message))
-    client.disconnect()
-    return
+	try:
+		client.connect(broker_address, port=port)
+		time.sleep(0.5)
+		client.publish(topic,json.dumps(message))
+		client.disconnect()
+	except:
+		print("failed")
+
+	return

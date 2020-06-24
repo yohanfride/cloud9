@@ -14,7 +14,8 @@ db = db.dbmongo()
 define_url = [
     ['add/','add'],
     ['','list'],
-    ['detail','detail'],
+    ['count/','count'],
+    ['detail/','detail'],
     ['edit/','update'],
     ['delete/','delete']
 ]
@@ -65,6 +66,25 @@ class list(RequestHandler):
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
     else:
         response = {"status":True, 'message':'Success','data':result['data']}
+    self.write(response)
+
+class count(RequestHandler):
+  def post(self):    
+    data = json.loads(self.request.body)
+    query = data
+    if "id" in query :
+        try:
+            query["_id"] = ObjectId(query["id"])
+            del query["id"]
+        except:
+            del query["id"]
+            
+    query = data
+    result = deviceController.find(query)
+    if not result['status']:
+        response = {"status":False, "message":"Data Not Found",'data':0}               
+    else:
+        response = {"status":True, 'message':'Success','data':len(result['data'])}
     self.write(response)
 
 class detail(RequestHandler):
@@ -128,7 +148,7 @@ class delete(RequestHandler):
         response = {"status":False, "message":"Wrong id",'data':json.loads(self.request.body)}               
         self.write(response) 
         return
-
+    
     result = deviceController.findOne(query)
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}            

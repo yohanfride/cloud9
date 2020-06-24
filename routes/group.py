@@ -181,6 +181,15 @@ class addMember(RequestHandler):
         self.write(response) 
         return
 
+    result = groupController.getItemMember(query,data["user_id"])
+    print("-----------------------")
+    print(result)
+    sys.stdout.flush()
+    if result['status']:
+        response = {"status":False, "message":"Member exists",'data':json.loads(self.request.body)}
+        self.write(response)
+        return
+    del query["member"]
     result = groupController.findOne(query)
     if not result['status']:
         response = {"status":False, "message":"Data Not Found",'data':json.loads(self.request.body)}               
@@ -189,7 +198,7 @@ class addMember(RequestHandler):
         if not update['status']:
             response = {"status":False, "message":"Failed to add member","data":json.loads(self.request.body)}
         else:
-            response = {"status":True, 'message':'Add member success'}
+            response = {"status":True, 'message':'Add member success'}    
     self.write(response)
 
 class updateMember(RequestHandler):

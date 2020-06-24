@@ -146,8 +146,8 @@ def updateMember(query,oldData,data):
 def getItemMember(query,user_id):            
     query['member'] = { '$elemMatch': {"user_id":user_id } };
     result = db.findOne(collection,query)
-    if result == []:
-        response = {"status":False, "data":data}               
+    if result is None or result is False:
+        response = {"status":False, "data":result}               
     else:
         response = {'status':True, 'data':result}    
     return cloud9Lib.jsonObject(response)

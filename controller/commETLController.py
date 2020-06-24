@@ -15,6 +15,7 @@ def etl(collection,info,device_code,message):  #info --> , channel_type,topic,to
     insertQuery = info
     insertQuery['raw_message'] = message
     insertQuery['date_add_server'] = datetime.datetime.utcnow()
+    insertQuery['device_code'] = device_code
 
     queryDevice = {
         'device_code' : device_code

@@ -67,6 +67,7 @@ def update(query,data):
     
     if 'name' in data: updateData['name'] = data['name']
     if 'add_by' in data: updateData['add_by'] = data['add_by']
+    if 'updated_by' in data: updateData['updated_by'] = data['updated_by']
     if 'active' in data: updateData['active'] = data['active']
     if 'access_group' in data: updateData['access_group'] = data['access_group']
     if 'information' in data: updateData['information'] = data['information']

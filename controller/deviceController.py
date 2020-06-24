@@ -59,6 +59,7 @@ def update(query,data):
     if 'device_code' in data: updateData['device_code'] = data['device_code']
     if 'field' in data: updateData['field'] = data['field']
     if 'information' in data: updateData['information'] = data['information']
+    if 'updated_by' in data: updateData['updated_by'] = data['updated_by']
     if 'token_access' in data: updateData['token_access'] = data['token_access']
 
     if updateData == []:

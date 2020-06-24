@@ -14,7 +14,7 @@ define_url = [
     ['add/','add'],
     ['','list'],
     ['count/','count'],
-    ['detail','detail'],
+    ['detail/','detail'],
     ['edit/','update'],
     ['delete/','delete']
 ]

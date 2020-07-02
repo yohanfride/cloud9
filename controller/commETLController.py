@@ -14,7 +14,7 @@ db = db.dbmongo()
 def etl(collection,info,device_code,message):  #info --> , channel_type,topic,token_access,ip_sender,date_add_sensor
     insertQuery = info
     insertQuery['raw_message'] = message
-    insertQuery['date_add_server'] = datetime.datetime.utcnow()
+    insertQuery['date_add_server'] = datetime.datetime.today() #datetime.datetime.utcnow()
     insertQuery['device_code'] = device_code
 
     queryDevice = {
@@ -67,7 +67,7 @@ def extract_etl(field,data):
 def nonetl(collection,info,message):  #info --> device_code, channel_type,topic,token_access,ip_sender,date_add_sensor
     insertQuery = info
     insertQuery['raw_message'] = message
-    insertQuery['date_add_server'] = datetime.datetime.utcnow()
+    insertQuery['date_add_server'] = datetime.datetime.today() #datetime.datetime.utcnow()
     print(insertQuery)
     print("------------------")
     sys.stdout.flush()

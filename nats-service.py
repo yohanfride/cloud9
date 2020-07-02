@@ -62,6 +62,8 @@ def subscribe_list():
 
 def message_insert(topic,message,messageStr):
     #Log Insert#
+    print("Topic: "+topic)
+    sys.stdout.flush()
     insertLog = {
         'topic' : topic,
         'channel_type':'nats',
@@ -89,7 +91,7 @@ def message_insert(topic,message,messageStr):
     }
     if 'date_add' in message :
         try:
-            infoMqtt['date_add_sensor'] = datetime.datetime.strptime(message['date_add'],'%Y-%m-%d %H:%M:%S')
+            infoMqtt['date_add_sensor'] = datetime.strptime(message['date_add'],'%Y-%m-%d %H:%M:%S')
         except:
             infoMqtt['date_add_sensor'] = message['date_add']
     else :

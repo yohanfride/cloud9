@@ -4,6 +4,7 @@ from function import *
 from controller import comChannelController
 from controller import commETLController
 from controller import commLogController
+from datetime import datetime
 
 topic_list = {} 
 Connected = False
@@ -16,6 +17,7 @@ port = 1883
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to broker")
+        sys.stdout.flush()
         global Connected                
         Connected = True   
         subscribe_list()             
@@ -68,6 +70,8 @@ def subscribe_list():
 
 def message_insert(topic,message,messageStr):
     #Log Insert#
+    print("Topic: "+topic)
+    sys.stdout.flush()
     insertLog = {
         'topic' : topic,
         'channel_type':'mqtt',
@@ -95,8 +99,10 @@ def message_insert(topic,message,messageStr):
     }
     if 'date_add' in message :
         try:
-            infoMqtt['date_add_sensor'] = datetime.datetime.strptime(message['date_add'],'%Y-%m-%d %H:%M:%S')
+            infoMqtt['date_add_sensor'] = datetime.strptime(message['date_add'],'%Y-%m-%d %H:%M:%S')
         except:
+            print("error")
+            sys.stdout.flush()
             infoMqtt['date_add_sensor'] = message['date_add']
     else :
         infoMqtt['date_add_sensor'] = None

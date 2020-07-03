@@ -1,0 +1,7 @@
+pip install paho-mqtt
+pip install pymongo
+pip install cryptography
+pip install nats-python
+pip install pycryptodomex
+pip install python-slugify
+pip install tornado

@@ -8,7 +8,7 @@ from controller import comChannelController
 from controller import commETLController
 from controller import commLogController
 
-broker_address = "127.0.0.1"
+broker_address = "103.56.148.215"  #"127.0.0.1"
 port = "4222"
 topic_list = {}
 topicsdata = {} 

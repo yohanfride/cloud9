@@ -5,6 +5,7 @@ from controller import comChannelController
 from controller import commETLController
 from controller import commLogController
 from datetime import datetime
+from pytz import timezone
 
 topic_list = {} 
 Connected = False
@@ -12,7 +13,6 @@ broker_address= "161.117.58.227"
 port = 1883                         
 user = "OGRhNTI5MzE1YjY0ZWRlN2EwNjI2Mzg1"
 password = "hdMFWDGTnfbhfoxoW7YXU8IwyAhFbD"
-#password = "hdMFWDGTnfbhfoxoW7YXU8IwyAhFbD"
 
 
 def on_connect(client, userdata, flags, rc):

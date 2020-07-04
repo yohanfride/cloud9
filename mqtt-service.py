@@ -8,10 +8,10 @@ from datetime import datetime
 
 topic_list = {} 
 Connected = False
-broker_address= "localhost"
+broker_address= "161.117.58.227"
 port = 1883                         
-# user = "yourUser"
-# password = "yourPassword"
+user = "OGRhNTI5MzE1YjY0ZWRlN2EwNjI2Mzg1"
+password = "hdMFWDGTnfbhfoxoW7YXU8IwyAhFbD"
 
 
 def on_connect(client, userdata, flags, rc):
@@ -129,7 +129,7 @@ def message_insert(topic,message,messageStr):
 
 
 client = mqttClient.Client("Python3")               
-# client.username_pw_set(user, password=password)    #set username and password
+client.username_pw_set(username=user, password=password)    #set username and password
 client.on_connect= on_connect                      
 client.on_message= on_message                      
 client.connect(broker_address, port=port)          

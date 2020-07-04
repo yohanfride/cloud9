@@ -3,7 +3,7 @@ import paho.mqtt.client as paho
 import json
 from datetime import datetime
 
-broker="127.0.0.1"
+broker="161.117.58.227"#"127.0.0.1"
 port=1883
 topic='message/sensor/py787b'
 
@@ -13,6 +13,7 @@ def on_publish(client,userdata,result): #create function for callback
 
 client1= paho.Client("iot") #create client object
 client1.on_publish = on_publish  #assign function to callback
+client1.username_pw_set(username="OGRhNTI5MzE1YjY0ZWRlN2EwNjI2Mzg1",password="hdMFWDGTnfbhfoxoW7YXU8IwyAhFbD") #userpass
 client1.connect(broker,port) #establish connection
 today = datetime.today() #current-datetime
 msg = {

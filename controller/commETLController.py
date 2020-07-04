@@ -6,6 +6,7 @@ import json
 from function import *
 import datetime
 from controller import deviceController
+from pytz import timezone
 
 
 sensors = []
@@ -14,9 +15,13 @@ db = db.dbmongo()
 def etl(collection,info,device_code,message):  #info --> , channel_type,topic,token_access,ip_sender,date_add_sensor
     insertQuery = info
     insertQuery['raw_message'] = message
-    insertQuery['date_add_server'] = datetime.datetime.utcnow() #datetime.datetime.utcnow()
-    insertQuery['date_add_server_unix'] = round(datetime.datetime.utcnow().timestamp() * 1000) #datetime.datetime.utcnow()
+    print("------------------")
+    sys.stdout.flush()
+    insertQuery['date_add_server'] = datetime.datetime.now(timezone('Asia/Jakarta')) #datetime.datetime.utcnow() #datetime.datetime.utcnow()
+    insertQuery['date_add_server_unix'] = round(datetime.datetime.now(timezone('Asia/Jakarta')).timestamp() * 1000) #round(datetime.datetime.utcnow().timestamp() * 1000) #datetime.datetime.utcnow()
     insertQuery['device_code'] = device_code
+    print(insertQuery['date_add_server'])
+    print(insertQuery['date_add_server_unix'])
 
     queryDevice = {
         'device_code' : device_code

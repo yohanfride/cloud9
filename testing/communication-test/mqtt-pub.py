@@ -5,7 +5,7 @@ from datetime import datetime
 
 broker="161.117.58.227"#"127.0.0.1"
 port=1883
-topic='message/sensor/py787b'
+topic= 'message/sensor/j7k67b' #'message/sensor/py787b'
 
 def on_publish(client,userdata,result): #create function for callback
     print("data published")
@@ -17,8 +17,8 @@ client1.username_pw_set(username="OGRhNTI5MzE1YjY0ZWRlN2EwNjI2Mzg1",password="hd
 client1.connect(broker,port) #establish connection
 today = datetime.today() #current-datetime
 msg = {
-    "device_code":"py787b-mw47",
-    "date_add": round(datetime.utcnow().timestamp() * 1000), #today.strftime("%Y-%m-%d %H:%M:%S"),
+    "device_code":"j7k67b-wa51", #"py787b-mw47",
+    "date_add": round(datetime.today().timestamp() * 1000), #today.strftime("%Y-%m-%d %H:%M:%S"),
     "gps":{
         "latitude":-7.575973,
         "longitude":112.878304

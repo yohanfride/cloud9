@@ -99,7 +99,15 @@ def message_insert(topic,message,messageStr):
     }
     if 'date_add' in message :
         try:
-            infoMqtt['date_add_sensor'] = datetime.strptime(message['date_add'],'%Y-%m-%d %H:%M:%S')
+            if(isinstance(message['date_add'],int)):
+                infoMqtt['date_add_sensor_unix'] = message['date_add']
+                try:
+                    today = datetime.fromtimestamp(round(message['date_add']))
+                except:
+                    today = datetime.fromtimestamp(round(message['date_add']/1000))
+                infoMqtt['date_add_sensor'] = today
+            else:
+                infoMqtt['date_add_sensor'] = datetime.strptime(message['date_add'],'%Y-%m-%d %H:%M:%S')
         except:
             print("error")
             sys.stdout.flush()

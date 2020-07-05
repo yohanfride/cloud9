@@ -22,17 +22,22 @@ from pytz import timezone
 
 fmt = "%Y-%m-%d %H:%M:%S %Z%z"
 
-# Current time in UTC
-now_utc = datetime.now(timezone('Asia/Jakarta')) #datetime.now(timezone('Asia/Jakarta'))
-print(now_utc.strftime(fmt))
-print(datetime.utcnow().strftime(fmt))
-print(round(datetime.now(timezone('Asia/Jakarta')).timestamp() * 1000) )
-print(round(datetime.utcnow().timestamp() * 1000))
+# # Current time in UTC
+# now_utc = datetime.now(timezone('Asia/Jakarta')) #datetime.now(timezone('Asia/Jakarta'))
+# print(now_utc.strftime(fmt))
+# print(datetime.utcnow().strftime(fmt))
+# print(round(datetime.now(timezone('Asia/Jakarta')).timestamp() * 1000) )
+# print(round(datetime.utcnow().timestamp() * 1000))
 
-# Convert to US/Pacific time zone
-now_pacific = now_utc.astimezone(timezone('Asia/Singapore'))
-print(now_pacific.strftime(fmt))
+# # Convert to US/Pacific time zone
+# now_pacific = now_utc.astimezone(timezone('Asia/Singapore'))
+# print(now_pacific.strftime(fmt))
 
-# Convert to Europe/Berlin time zone
-now_berlin = now_pacific.astimezone(timezone('Asia/Jakarta'))
-print(now_berlin.strftime(fmt))
+# # Convert to Europe/Berlin time zone
+# now_berlin = now_pacific.astimezone(timezone('Asia/Jakarta'))
+# print(now_berlin.strftime(fmt))
+data = {}
+data['date_add'] = 1593917125799
+today = datetime.fromtimestamp(round(data['date_add']),timezone('Asia/Jakarta'))
+today = datetime.fromtimestamp(round(data['date_add']),timezone('Asia/Jakarta')) 
+print(today)

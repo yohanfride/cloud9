@@ -7,7 +7,7 @@ from function import *
 from controller import comChannelController
 from controller import commETLController
 from controller import commLogController
-import datetime 
+from datetime import datetime 
 from pytz import timezone
 
 groups = []
@@ -58,14 +58,14 @@ class add(RequestHandler):
     if 'date_add' in data :
         try:
             if(isinstance(data['date_add'],int)):
-                infoMqtt['date_add_sensor_unix'] = data['date_add']
+                infoHttp['date_add_sensor_unix'] = data['date_add']
                 try:
                     today = datetime.fromtimestamp(round(data['date_add']),timezone('Asia/Jakarta')) #datetime.fromtimestamp(round(message['date_add']))
                 except:
                     today = datetime.fromtimestamp(round(data['date_add']/1000),timezone('Asia/Jakarta')) #datetime.fromtimestamp(round(message['date_add']/1000))
-                infoMqtt['date_add_sensor'] = today
+                infoHttp['date_add_sensor'] = today
             else:
-                infoMqtt['date_add_sensor'] = datetime.strptime(data['date_add'],'%Y-%m-%d %H:%M:%S')
+                infoHttp['date_add_sensor'] = datetime.strptime(data['date_add'],'%Y-%m-%d %H:%M:%S')
         except:
             print("error")
             infoHttp['date_add_sensor'] = data['date_add']

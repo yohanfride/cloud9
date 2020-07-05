@@ -3,16 +3,16 @@ import argparse
 import json
 from datetime import datetime
 
-broker = "127.0.0.1"
+broker = "161.117.58.227"#"127.0.0.1"
 port = "4222"
-subject = 'message/sensor/py787b'
+subject = 'message/sensor/j7k67b' #'message/sensor/py787b'
 
 client = NATSClient("nats://"+broker+":"+port,socket_timeout=2, verbose=True)
 client.connect()
 today = datetime.today() #current-datetime
 msg = {
-    "device_code":"py787b-mw47",
-    "date_add":today.strftime("%Y-%m-%d %H:%M:%S"),
+    "device_code":"j7k67b-wa51", #"py787b-mw47",
+    "date_add":round(datetime.today().timestamp() * 1000), #today.strftime("%Y-%m-%d %H:%M:%S"),
     "gps":{
         "latitude":-7.575973,
         "longitude":112.878304

@@ -5,3 +5,5 @@ pip install nats-python
 pip install pycryptodomex
 pip install python-slugify
 pip install tornado
+pip install pytz
+pip install elasticsearch

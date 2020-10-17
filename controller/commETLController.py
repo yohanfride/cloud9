@@ -7,12 +7,13 @@ from function import *
 import datetime
 from controller import deviceController
 from pytz import timezone
-
+import copy
 
 sensors = []
 db = db.dbmongo()
+elastic = elastic.elastic()
 
-def etl(collection,info,device_code,message):  #info --> , channel_type,topic,token_access,ip_sender,date_add_sensor
+def etl(collection,elastic_index,info,device_code,message):  #info --> , channel_type,topic,token_access,ip_sender,date_add_sensor
     insertQuery = info
     insertQuery['raw_message'] = message
     print("------------------")
@@ -37,6 +38,7 @@ def etl(collection,info,device_code,message):  #info --> , channel_type,topic,to
                 fieldName = fieldData
             insertQuery[fieldName] = extract_etl(fieldData,message)
 
+    insertElastic = copy.copy(insertQuery)
     print(collection)
     print(insertQuery)
     print("------------------")
@@ -45,7 +47,9 @@ def etl(collection,info,device_code,message):  #info --> , channel_type,topic,to
     if result == []:
         response = {'status':False, 'message':"Add Failed"}               
     else:        
-        response = {'status':True,'message':'Success','data':result}        
+        response = {'status':True,'message':'Success','data':result}    
+        sys.stdout.flush()
+        elastic.insertOne(elastic_index,insertElastic)    
     print(response)
     return cloud9Lib.jsonObject(response)
 
@@ -70,16 +74,18 @@ def extract_etl(field,data):
             return None
 
 
-def nonetl(collection,info,message):  #info --> device_code, channel_type,topic,token_access,ip_sender,date_add_sensor
+def nonetl(collection,elastic_index,info,message):  #info --> device_code, channel_type,topic,token_access,ip_sender,date_add_sensor
     insertQuery = info
     insertQuery['raw_message'] = message
     insertQuery['date_add_server'] = datetime.datetime.today() #datetime.datetime.utcnow()
     print(insertQuery)
     print("------------------")
     sys.stdout.flush()
+    insertElastic = copy.copy(insertQuery)
     result = db.insertData(collection,insertQuery)
     if result == []:
         response = {'status':False, 'message':"Add Failed"}               
     else:        
-        response = {'status':True,'message':'Success','data':result}        
+        response = {'status':True,'message':'Success','data':result} 
+        elastic.insertOne(elastic_index,insertElastic)    
     return cloud9Lib.jsonObject(response)

@@ -21,6 +21,7 @@ def add(fillData):
         'active':fillData.get('active', False),
         'collection_name':fillData.get('collection_name', None),
         'date_add': datetime.datetime.utcnow(),
+        'index_log':fillData.get('index_log', None),
         'add_by':fillData.get('add_by', None)        
     }
     # print("------------------")

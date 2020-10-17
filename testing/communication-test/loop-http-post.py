@@ -6,12 +6,12 @@ import sys
 import random
 
 token = "jjn7jpy787b26u8ux"
-url = "http://localhost:3001/comdata/sensor/"+token+"/"
+url = "http://161.117.58.227:3001/comdata/sensor/"+token+"/" #"http://localhost:3001/comdata/sensor/"+token+"/"
 for x in range(1000):
     today = datetime.today()
     msg = {
         "device_code":"py787b-qo06",
-        "date_add":today.strftime("%Y-%m-%d %H:%M:%S"),
+        "date_add":round(datetime.today().timestamp() * 1000)-700, #today.strftime("%Y-%m-%d %H:%M:%S"),
         "gps":{
             "latitude":-7.475973 + (random.randint(1,1000) / 10000 ),
             "longitude":112.978304 - ( random.randint(1,1000) / 10000 )

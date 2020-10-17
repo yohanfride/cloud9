@@ -73,9 +73,9 @@ class add(RequestHandler):
         infoHttp['date_add_sensor'] = None
 
     if 'device_code' in data :
-        insert = commETLController.etl(channelData['collection_name'],infoHttp,data['device_code'],data)
+        insert = commETLController.etl(channelData['collection_name'],channelData['index_log'],infoHttp,data['device_code'],data)
     else :
-        insert = commETLController.nonetl(channelData['collection_name'],infoHttp,data)
+        insert = commETLController.nonetl(channelData['collection_name'],channelData['index_log'],infoHttp,data)
     
     if not insert['status']:
         response = {"status":False, "message":"Failed to add", 'data':json.loads(self.request.body)}               

@@ -10,8 +10,10 @@ from controller import comChannelController
 
 sensors = []
 db = db.dbmongo()
+elastic = elastic.elastic()
 prefix_topic = "message/sensor/"
 prefix_collection = "sensor_data_"
+prefix_elastic = "group-"
 collection = "group_sensor"
 
 def add(fillData):  
@@ -33,10 +35,12 @@ def add(fillData):
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result}
+        elastic.createIndex(fillData.get('code_name', None))
         if 'communication' in fillData :
             insertComm = fillData['communication']
             insertComm['group_id'] = cloud9Lib.jsonObject(result)
             insertComm['token_access'] = fillData['token_access']
+            insertComm['index_log'] = prefix_elastic + fillData['code_name']
             if 'topic' not in insertComm :
                 insertComm['topic'] = prefix_topic+fillData['code_name']
             communication_add(insertComm)
@@ -103,7 +107,8 @@ def delete(query):
 def communication_add(fillData):
     insertcomm = {
         'token_access':fillData['token_access'],
-        'collection_name':prefix_collection+fillData['group_id']
+        'collection_name':prefix_collection+fillData['group_id'],
+        'index_log':fillData['index_log']
     }
 
     if 'http-post' in fillData :

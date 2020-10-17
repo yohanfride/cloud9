@@ -9,7 +9,7 @@ from pytz import timezone
 
 topic_list = {} 
 Connected = False
-broker_address= "161.117.58.227"
+broker_address= "localhost" #"161.117.58.227"
 port = 1883                         
 user = "OGRhNTI5MzE1YjY0ZWRlN2EwNjI2Mzg1"
 password = "hdMFWDGTnfbhfoxoW7YXU8IwyAhFbD"
@@ -67,6 +67,7 @@ def subscribe_list():
         topic_list[val['topic']] = val['channel_code']
         client.subscribe(val['topic'])
         print("Subscribe Topic: "+val['topic'])
+        sys.stdout.flush()
  
 
 def message_insert(topic,message,messageStr):
@@ -117,9 +118,9 @@ def message_insert(topic,message,messageStr):
         infoMqtt['date_add_sensor'] = None
 
     if 'device_code' in message :
-        insert = commETLController.etl(channelData['collection_name'],infoMqtt,message['device_code'],message)
+        insert = commETLController.etl(channelData['collection_name'],channelData['index_log'],infoMqtt,message['device_code'],message)
     else :
-        insert = commETLController.nonetl(channelData['collection_name'],infoMqtt,message)
+        insert = commETLController.nonetl(channelData['collection_name'],channelData['index_log'],infoMqtt,message)
     
     if not insert['status']:
         response = {"status":False, "message":"Failed to add", 'data':json.loads(self.request.body)}               
@@ -130,7 +131,7 @@ def message_insert(topic,message,messageStr):
 
 
 client = mqttClient.Client("Python3")               
-client.username_pw_set(username=user, password=password)    #set username and password
+#client.username_pw_set(username=user, password=password)    #set username and password
 client.on_connect= on_connect                      
 client.on_message= on_message                      
 client.connect(broker_address, port=port)          

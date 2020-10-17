@@ -10,7 +10,7 @@ from controller import commLogController
 from pytz import timezone
 #
 
-broker_address = "161.117.58.227"  #"127.0.0.1"
+broker_address = "127.0.0.1" #"161.117.58.227"
 port = "4222"
 topic_list = {}
 topicsdata = {} 
@@ -108,9 +108,9 @@ def message_insert(topic,message,messageStr):
         infoMqtt['date_add_sensor'] = None
 
     if 'device_code' in message :
-        insert = commETLController.etl(channelData['collection_name'],infoMqtt,message['device_code'],message)
+        insert = commETLController.etl(channelData['collection_name'],channelData['index_log'],infoMqtt,message['device_code'],message)
     else :
-        insert = commETLController.nonetl(channelData['collection_name'],infoMqtt,message)
+        insert = commETLController.nonetl(channelData['collection_name'],channelData['index_log'],infoMqtt,message)
     
     if not insert['status']:
         response = {"status":False, "message":"Failed to add", 'data':json.loads(self.request.body)}               

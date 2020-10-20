@@ -41,6 +41,7 @@ def etl(collection,elastic_index,info,device_code,message):  #info --> , channel
     insertElastic = copy.copy(insertQuery)
     print(collection)
     print(insertQuery)
+    print("mqtt/elastic/"+elastic_index)
     print("------------------")
     sys.stdout.flush()
     result = db.insertData(collection,insertQuery)
@@ -48,9 +49,10 @@ def etl(collection,elastic_index,info,device_code,message):  #info --> , channel
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result}    
-        sys.stdout.flush()
+        mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
         elastic.insertOne(elastic_index,insertElastic)    
     print(response)
+    sys.stdout.flush()
     return cloud9Lib.jsonObject(response)
 
 def extract_etl(field,data):
@@ -79,6 +81,7 @@ def nonetl(collection,elastic_index,info,message):  #info --> device_code, chann
     insertQuery['raw_message'] = message
     insertQuery['date_add_server'] = datetime.datetime.today() #datetime.datetime.utcnow()
     print(insertQuery)
+    print("mqtt/elastic/"+elastic_index)
     print("------------------")
     sys.stdout.flush()
     insertElastic = copy.copy(insertQuery)
@@ -87,5 +90,6 @@ def nonetl(collection,elastic_index,info,message):  #info --> device_code, chann
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result} 
-        elastic.insertOne(elastic_index,insertElastic)    
+        elastic.insertOne(elastic_index,insertElastic)
+        mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
     return cloud9Lib.jsonObject(response)

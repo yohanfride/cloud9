@@ -29,6 +29,7 @@ def add(fillData):
         'communication':fillData.get('communication', None), #array[topic, mqtt-active, http-post-active, nats-activ/e]
         'group_type':fillData.get('group_type', None),
         'group_code':fillData.get('group_code', None)
+        'view_dashboard':fillData.get('view_dashboard', None)
     }
     result = db.insertData(collection,insertQuery)
     if result == []:
@@ -77,6 +78,7 @@ def update(query,data):
     if 'information' in data: updateData['information'] = data['information']
     if 'token_access' in data: updateData['token_access'] = data['token_access']
     if 'communication' in data: updateData['communication'] = data['communication']
+    if 'view_dashboard' in data: updateData['view_dashboard'] = data['view_dashboard']
 
     if updateData == []:
         return {"status":False, "message":"UPDATE NONE"}        

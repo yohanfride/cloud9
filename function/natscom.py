@@ -4,7 +4,7 @@ import argparse
 import json
 import sys, json, time
 
-broker_address = "127.0.0.1"
+broker_address = "103.56.148.215"
 port = "4222"
 client = NATSClient("nats://"+broker_address+":"+port,verbose=True)
 

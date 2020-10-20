@@ -28,7 +28,7 @@ def add(fillData):
         'token_access':fillData.get('token_access', None),
         'communication':fillData.get('communication', None), #array[topic, mqtt-active, http-post-active, nats-activ/e]
         'group_type':fillData.get('group_type', None),
-        'group_code':fillData.get('group_code', None)
+        'group_code':fillData.get('group_code', None),
         'view_dashboard':fillData.get('view_dashboard', None)
     }
     result = db.insertData(collection,insertQuery)

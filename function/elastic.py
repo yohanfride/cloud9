@@ -2,7 +2,7 @@
 from elasticsearch import Elasticsearch
 
 class elastic:
-    def __init__(self,host = 'localhost',port = 9200):
+    def __init__(self,host = 'x1.hcm-lab.id',port = 9200):
         self.client =  Elasticsearch(host = host, port = port)
 
     def createIndex(self,index):

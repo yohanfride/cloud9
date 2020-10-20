@@ -10,7 +10,7 @@ from controller import commLogController
 from pytz import timezone
 #
 
-broker_address = "127.0.0.1" #"161.117.58.227"
+broker_address = "103.56.148.215" #"161.117.58.227"
 port = "4222"
 topic_list = {}
 topicsdata = {} 

@@ -1,3 +1,5 @@
+global count_mongo
+count_mongo = 0
 from tornado.web import Application, RequestHandler, ErrorHandler
 from tornado.ioloop import IOLoop
 from function.db import dbmongo
@@ -7,6 +9,7 @@ import traceback
 import json 
 import sys
 import asyncio
+
 
 db = dbmongo()
 if sys.platform == 'win32':
@@ -19,4 +22,9 @@ def make_app():
 if __name__ == '__main__':
   app = make_app()
   app.listen(3001)
+  print("***********************")
+  print ("Restart App")
+  print("***********************")
+  count_mongo++
+  sys.stdout.flush()
   IOLoop.instance().start()

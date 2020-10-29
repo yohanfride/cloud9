@@ -5,13 +5,15 @@ from bson.objectid import ObjectId
 from bson.json_util import loads, dumps
 import json
 
+
 class dbmongo:
     def __init__(self,host = 'localhost',port = 27017,uname = '*',pwd = '*',db = 'actRecog'):
         self.client = pymongo.MongoClient(host=host,port=port, authSource=db) #username=uname, password=pwd,
         self.db = self.client[db]
         print("***********************")
-        print ("Restart Mongo")
+        print ("Restart Mongo = "+count_mongo)
         print("***********************")
+        count_mongo++
         sys.stdout.flush()
 
     def checkCollections(self, col):

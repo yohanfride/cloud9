@@ -14,8 +14,6 @@ if sys.platform == 'win32':
     
 def make_app(): 
   urls = route_init.list_url
-  # print()
-  # sys.stdout.flush()
   return Application(urls, debug=False)
   
 if __name__ == '__main__':

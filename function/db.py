@@ -9,6 +9,10 @@ class dbmongo:
     def __init__(self,host = 'localhost',port = 27017,uname = '*',pwd = '*',db = 'actRecog'):
         self.client = pymongo.MongoClient(host=host,port=port, authSource=db) #username=uname, password=pwd,
         self.db = self.client[db]
+        print("***********************")
+        print ("Restart Mongo")
+        print("***********************")
+        sys.stdout.flush()
 
     def checkCollections(self, col):
         self.collist = self.db.list_collection_names()

@@ -5,16 +5,19 @@ from bson.objectid import ObjectId
 from bson.json_util import loads, dumps
 import json
 
+#Config
+host="localhost"
+port = 27017
+uname = "*"
+pwd = "*"
+db = "actRecog"
+client = pymongo.MongoClient(host=host,port=port, authSource=db)
+db = client[db]
 
 class dbmongo:
-    def __init__(self,host = 'localhost',port = 27017,uname = '*',pwd = '*',db = 'actRecog'):
-        self.client = pymongo.MongoClient(host=host,port=port, authSource=db) #username=uname, password=pwd,
-        self.db = self.client[db]
-        print("***********************")
-        print ("Restart Mongo = "+count_mongo)
-        print("***********************")
-        count_mongo = count_mongo + 1
-        sys.stdout.flush()
+    def __init__(self):
+        self.client = client #username=uname, password=pwd,
+        self.db = db
 
     def checkCollections(self, col):
         self.collist = self.db.list_collection_names()

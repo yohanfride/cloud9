@@ -7,7 +7,7 @@ from function import *
 from controller import comChannelController
 
 groups = []
-db = db.dbmongo()
+
 
 #PRIMARY VARIABLE - DONT DELETE
 define_url = [

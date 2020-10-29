@@ -1,5 +1,3 @@
-global count_mongo
-count_mongo = 0
 from tornado.web import Application, RequestHandler, ErrorHandler
 from tornado.ioloop import IOLoop
 from function.db import dbmongo

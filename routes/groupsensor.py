@@ -7,7 +7,6 @@ from function import *
 from controller import groupSensorController
 
 groups = []
-db = db.dbmongo()
 
 #PRIMARY VARIABLE - DONT DELETE
 define_url = [

@@ -9,7 +9,6 @@ from datetime import datetime
 from datetime import timedelta
 
 users = []
-db = db.dbmongo()
 
 #PRIMARY VARIABLE - DONT DELETE
 define_url = [

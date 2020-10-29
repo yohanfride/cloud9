@@ -11,7 +11,7 @@ from datetime import datetime
 from pytz import timezone
 
 groups = []
-db = db.dbmongo()
+
 
 #PRIMARY VARIABLE - DONT DELETE
 define_url = [

@@ -6,7 +6,6 @@ import json
 from function import *
 
 items = []
-db = db.dbmongo()
 
 define_url = [
 	['add/','add'],

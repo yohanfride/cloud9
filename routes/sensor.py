@@ -7,7 +7,6 @@ from function import *
 from controller import sensorController
 
 sensors = []
-db = db.dbmongo()
 
 #PRIMARY VARIABLE - DONT DELETE
 # print(result)

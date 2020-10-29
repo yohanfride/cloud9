@@ -8,7 +8,6 @@ from controller import deviceController
 from controller import groupSensorController
 
 groups = []
-db = db.dbmongo()
 
 #PRIMARY VARIABLE - DONT DELETE
 define_url = [

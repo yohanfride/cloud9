@@ -25,6 +25,5 @@ if __name__ == '__main__':
   print("***********************")
   print ("Restart App")
   print("***********************")
-  count_mongo++
   sys.stdout.flush()
   IOLoop.instance().start()

@@ -13,7 +13,7 @@ class dbmongo:
         print("***********************")
         print ("Restart Mongo = "+count_mongo)
         print("***********************")
-        count_mongo++
+        count_mongo = count_mongo + 1
         sys.stdout.flush()
 
     def checkCollections(self, col):

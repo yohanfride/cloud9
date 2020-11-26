@@ -8,10 +8,36 @@ import datetime
 from controller import deviceController
 from pytz import timezone
 import copy
+import base64
+from base64 import decodestring
+import os
 
 sensors = []
 db = db.dbmongo()
 elastic = elastic.elastic()
+main_folder = "data"
+
+def add_dir(new_dir):
+    if not os.path.exists(new_dir):
+        os.makedirs(new_dir)
+
+def save_image(message,field,group,device_name):
+    try:
+        folder = main_folder + "/" + group
+        imagesFile = base64.b64decode(message)
+        file_name = device_name + "_" + field + "_" + str(round(datetime.datetime.now(timezone('Asia/Jakarta')).timestamp() * 1000))
+        add_dir(folder)
+        image = open(folder+"/"+file_name+".png", "wb+")
+        image.write(imagesFile)
+        image.close()
+        res = {
+            'type':'image',
+            'url': file_name+".png"
+        }
+    except Exception as e:
+        print(e)
+    return res
+
 
 def etl(collection,elastic_index,info,device_code,message):  #info --> , channel_type,topic,token_access,ip_sender,date_add_sensor
     insertQuery = info
@@ -36,36 +62,38 @@ def etl(collection,elastic_index,info,device_code,message):  #info --> , channel
                 fieldName = list(fieldData.keys())[0]
             else:
                 fieldName = fieldData
-            insertQuery[fieldName] = extract_etl(fieldData,message)
+            insertQuery[fieldName] = extract_etl(fieldData,message,collection,device_code)
 
     insertElastic = copy.copy(insertQuery)
-    print(collection)
-    print(insertQuery)
-    print("mqtt/elastic/"+elastic_index)
-    print("------------------")
+    # print(collection)
+    # print(insertQuery)
+    # print("------------------")
     sys.stdout.flush()
     result = db.insertData(collection,insertQuery)
     if result == []:
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result}    
-        mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
-        elastic.insertOne(elastic_index,insertElastic)    
+        # mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
+        # elastic.insertOne(elastic_index,insertElastic)    
     print(response)
     sys.stdout.flush()
     return cloud9Lib.jsonObject(response)
 
-def extract_etl(field,data):
+def extract_etl(field,data,collection,device_code):
     if type(field) is dict:
         fieldName = list(field.keys())[0]
         if fieldName in data:
             result = {}
-            for item in field[fieldName]:
-                if type(item) is dict:
-                    itemName = list(item.keys())[0]
-                else:
-                    itemName = item
-                result[item] = extract_etl(item,data[fieldName])
+            if field[fieldName] == 'image' :
+                result = save_image(data[fieldName],fieldName,collection,device_code)
+            else :
+                for item in field[fieldName]:
+                    if type(item) is dict:
+                        itemName = list(item.keys())[0]
+                    else:
+                        itemName = item                
+                    result[item] = extract_etl(item,data[fieldName],collection,device_code)
             return result
         else:
             return None
@@ -80,16 +108,12 @@ def nonetl(collection,elastic_index,info,message):  #info --> device_code, chann
     insertQuery = info
     insertQuery['raw_message'] = message
     insertQuery['date_add_server'] = datetime.datetime.today() #datetime.datetime.utcnow()
-    print(insertQuery)
-    print("mqtt/elastic/"+elastic_index)
-    print("------------------")
-    sys.stdout.flush()
     insertElastic = copy.copy(insertQuery)
     result = db.insertData(collection,insertQuery)
     if result == []:
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result} 
-        elastic.insertOne(elastic_index,insertElastic)
-        mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
+        # elastic.insertOne(elastic_index,insertElastic)
+        # mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
     return cloud9Lib.jsonObject(response)

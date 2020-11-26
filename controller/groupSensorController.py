@@ -12,6 +12,7 @@ sensors = []
 db = db.dbmongo()
 elastic = elastic.elastic()
 prefix_topic = "message/sensor/"
+prefix_topic2 = "message-sensor-"
 prefix_collection = "sensor_data_"
 prefix_elastic = "group-"
 collection = "group_sensor"
@@ -36,14 +37,14 @@ def add(fillData):
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result}
-        elastic.createIndex(fillData.get('code_name', None))
+        #elastic.createIndex(fillData.get('code_name', None))
         if 'communication' in fillData :
             insertComm = fillData['communication']
             insertComm['group_id'] = cloud9Lib.jsonObject(result)
             insertComm['token_access'] = fillData['token_access']
             insertComm['index_log'] = prefix_elastic + fillData['code_name']
             if 'topic' not in insertComm :
-                insertComm['topic'] = prefix_topic+fillData['code_name']
+                insertComm['topic'] = fillData['code_name']
             communication_add(insertComm)
 
     return cloud9Lib.jsonObject(response)
@@ -124,7 +125,7 @@ def communication_add(fillData):
         insertMqtt = insertcomm;
         insertMqtt['channel_code'] = 'mqtt-'+fillData['token_access']
         insertMqtt['channel_type'] = 'mqtt'
-        insertMqtt['topic'] = fillData['topic']
+        insertMqtt['topic'] = prefix_topic+fillData['topic']
         insertMqtt['active'] = fillData['mqtt']
         comChannelController.add(insertMqtt)
 
@@ -132,9 +133,17 @@ def communication_add(fillData):
         insertNats = insertcomm;
         insertNats['channel_code'] = 'nats-'+fillData['token_access']
         insertNats['channel_type'] = 'nats'
-        insertNats['topic'] = fillData['topic']
+        insertNats['topic'] = prefix_topic+fillData['topic']
         insertNats['active'] = fillData['nats']
         comChannelController.add(insertNats)
+
+    if 'kafka' in fillData :
+        insertKafka = insertcomm;
+        insertKafka['channel_code'] = 'kafka-'+fillData['token_access']
+        insertKafka['channel_type'] = 'kafka'
+        insertKafka['topic'] = prefix_topic2+fillData['topic']
+        insertKafka['active'] = fillData['kafka']
+        comChannelController.add(insertKafka)
 
 def communication_update(fillData):
     if 'http-post' in fillData :
@@ -175,4 +184,17 @@ def communication_update(fillData):
                 updateNats['channel_type'] = 'nats'
                 updateNats['topic'] = commdata['topic']
                 comChannelController.update(query,updateNats)
+
+    if 'kafka' in fillData :
+        query = {
+            'channel_code': 'kafka-'+fillData['token_access']
+        }
+        commdata = comChannelController.findOne(query)['data']
+        if commdata :
+            if commdata['active'] != fillData['kafka'] : 
+                updateKafka = query
+                updateKafka['active'] = fillData['kafka']
+                updateKafka['channel_type'] = 'kafka'
+                updateKafka['topic'] = commdata['topic']
+                comChannelController.update(query,updateKafka)
 

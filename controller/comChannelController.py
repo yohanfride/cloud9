@@ -31,7 +31,7 @@ def add(fillData):
         response = {'status':False, 'message':"Add Failed"}               
     else:
         response = {'status':True,'message':'Success','data':result}
-        if insertQuery['active'] == True and ( insertQuery['channel_type'] == 'mqtt' or  insertQuery['channel_type'] == 'nats' ):
+        if insertQuery['active'] == True and ( insertQuery['channel_type'] == 'mqtt' or  insertQuery['channel_type'] == 'nats'  or  insertQuery['channel_type'] == 'kafka' ):
             trigger(insertQuery['channel_type'],insertQuery['topic'],insertQuery['channel_code'],'active')
 
     return cloud9Lib.jsonObject(response)
@@ -75,10 +75,10 @@ def update(query,data):
     else:
         response = {'status':True,'message':'Success','data':result}
         if last['active'] !=  updateData['active']:
-            if updateData['active'] == True and ( updateData['channel_type'] == 'mqtt' or  updateData['channel_type'] == 'nats' ):
+            if updateData['active'] == True and ( updateData['channel_type'] == 'mqtt' or  updateData['channel_type'] == 'nats' or  updateData['channel_type'] == 'kafka' ):
                 trigger(updateData['channel_type'],updateData['topic'],last['channel_code'],'active')
 
-            if updateData['active'] == False and ( updateData['channel_type'] == 'mqtt' or  updateData['channel_type'] == 'nats' ):
+            if updateData['active'] == False and ( updateData['channel_type'] == 'mqtt' or  updateData['channel_type'] == 'nats' or  updateData['channel_type'] == 'kafka' ):
                 trigger(updateData['channel_type'],updateData['topic'],last['channel_code'],'nonactive')
 
     return cloud9Lib.jsonObject(response)
@@ -117,5 +117,17 @@ def trigger(channel_type,topic,channel_code,status):
             return
         else:
             natscom.publish("nats/service/unsubscribe",send)
+            return
+
+    if channel_type == 'kafka':  
+        send = {
+            'topic':topic,
+            'channel_code':channel_code
+        }
+        if status == 'active':
+            kafkacom.publish("kafka-service-subscribe",send)
+            return
+        else:
+            kafkacom.publish("kafka-service-unsubscribe",send)
             return
 

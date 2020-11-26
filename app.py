@@ -1,4 +1,4 @@
-from tornado.web import Application, RequestHandler, ErrorHandler
+from tornado.web import Application, RequestHandler, ErrorHandler, StaticFileHandler
 from tornado.ioloop import IOLoop
 from function.db import dbmongo
 from routes import init as route_init
@@ -7,6 +7,7 @@ import traceback
 import json 
 import sys
 import asyncio
+import os
 
 
 db = dbmongo()
@@ -15,6 +16,7 @@ if sys.platform == 'win32':
     
 def make_app(): 
   urls = route_init.list_url
+  urls.append( (r"/data/(.*)", StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), 'data')}), )
   return Application(urls, debug=False)
   
 if __name__ == '__main__':

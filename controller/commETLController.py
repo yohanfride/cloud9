@@ -74,8 +74,8 @@ def etl(collection,elastic_index,info,device_code,message):  #info --> , channel
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result}    
-        # mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
-        # elastic.insertOne(elastic_index,insertElastic)    
+        mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
+        elastic.insertOne(elastic_index,insertElastic)    
     print(response)
     sys.stdout.flush()
     return cloud9Lib.jsonObject(response)
@@ -114,6 +114,6 @@ def nonetl(collection,elastic_index,info,message):  #info --> device_code, chann
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result} 
-        # elastic.insertOne(elastic_index,insertElastic)
-        # mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
+        elastic.insertOne(elastic_index,insertElastic)
+        mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
     return cloud9Lib.jsonObject(response)

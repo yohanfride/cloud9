@@ -37,7 +37,7 @@ def add(fillData):
         response = {'status':False, 'message':"Add Failed"}               
     else:        
         response = {'status':True,'message':'Success','data':result}
-        elastic.createIndex(fillData.get('code_name', None))
+        # elastic.createIndex(fillData.get('code_name', None))
         if 'communication' in fillData :
             insertComm = fillData['communication']
             insertComm['group_id'] = cloud9Lib.jsonObject(result)

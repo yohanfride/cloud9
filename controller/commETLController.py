@@ -75,7 +75,9 @@ def etl(collection,elastic_index,info,device_code,message):  #info --> , channel
     else:        
         response = {'status':True,'message':'Success','data':result}    
         mqttcom.publish("mqtt/elastic/"+elastic_index,insertElastic)    
-        elastic.insertOne(elastic_index,insertElastic)    
+        # elastic.insertOne(elastic_index,insertElastic) 
+        del insertElastic['raw_message']
+        mqttcom.publish("message/connector/sensor",insertElastic)    
     print(response)
     sys.stdout.flush()
     return cloud9Lib.jsonObject(response)

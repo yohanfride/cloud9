@@ -63,11 +63,12 @@ def subscribe_list():
         "channel_type": "mqtt"
     }
     result = comChannelController.find(query)
-    for val in result['data']:
-        topic_list[val['topic']] = val['channel_code']
-        client.subscribe(val['topic'])
-        print("Subscribe Topic: "+val['topic'])
-        sys.stdout.flush()
+    if result['status']:        
+        for val in result['data']:
+            topic_list[val['topic']] = val['channel_code']
+            client.subscribe(val['topic'])
+            print("Subscribe Topic: "+val['topic'])
+            sys.stdout.flush()
  
 
 def message_insert(topic,message,messageStr):

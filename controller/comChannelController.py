@@ -38,6 +38,10 @@ def add(fillData):
 
 def find(query):  
     result = db.find(collection,query)
+    print("------------------")
+    print(query)
+    print("------------------")
+    sys.stdout.flush()
     if result == []:
         response = {"status":False, "data":query}               
     else:
